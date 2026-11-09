@@ -96,3 +96,4 @@ export const Header: React.FC<HeaderProps> = ({ user, pendingCount = 0 }) => {
     </header>
   );
 };
+

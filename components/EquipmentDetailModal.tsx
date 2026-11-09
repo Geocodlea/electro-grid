@@ -314,3 +314,4 @@ export const EquipmentDetailModal: React.FC<EquipmentDetailModalProps> = ({
     </div>
   );
 };
+

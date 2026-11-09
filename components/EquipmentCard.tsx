@@ -116,3 +116,4 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({
     </article>
   );
 };
+

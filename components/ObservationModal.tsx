@@ -167,3 +167,4 @@ export const ObservationModal: React.FC<ObservationModalProps> = ({
     </div>
   );
 };
+

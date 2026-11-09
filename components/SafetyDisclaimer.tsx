@@ -34,3 +34,4 @@ export const SafetyDisclaimer: React.FC<SafetyDisclaimerProps> = ({ compact = fa
     </div>
   );
 };
+

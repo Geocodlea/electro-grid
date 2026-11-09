@@ -5,6 +5,7 @@ import {
   getZones,
   getStations,
   getLines,
+  getAllEquipment,
   getPendingObservations,
   getAuditHistory,
 } from '@/lib/db';
@@ -57,8 +58,7 @@ export default async function AdminPage() {
   }
 
   // Load all equipment for manual management table
-  const globalStore = (global as any).__EG_DB;
-  const allEquipment = globalStore?.equipment || [];
+  const allEquipment = await getAllEquipment(user);
 
   return (
     <div className="min-h-screen bg-grid-lightBg text-slate-900 flex flex-col">
@@ -82,3 +82,4 @@ export default async function AdminPage() {
     </div>
   );
 }
+

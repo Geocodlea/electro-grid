@@ -106,3 +106,4 @@ assert(parsedKml[2].validationErrors.some((e) => e.includes('poligon')), 'Polygo
 console.log('  ✓ Polygon Placemark centroid calculated with warning flag preserved.');
 
 console.log('\n🎉 ALL TESTS PASSED SUCCESSFULLY! The core logic conforms strictly to specifications.');
+

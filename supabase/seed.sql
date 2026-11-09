@@ -70,3 +70,4 @@ insert into public.equipment (equipment_code, name, equipment_type, line_id, loc
   ('PT-20-HAR-01', 'PT 1 Hărman Centru', 'PT', 'b1111111-0000-0000-0000-000000000002', 'Hărman', 45.711200, 25.688100, 'Post zidit lângă primărie.', false, null),
   ('SEP-20-HAR-02', 'Separator MT 20kV Hărman Gară', 'Separator', 'b1111111-0000-0000-0000-000000000002', 'Hărman', 45.719800, 25.694500, null, false, null)
 on conflict (equipment_code) do nothing;
+

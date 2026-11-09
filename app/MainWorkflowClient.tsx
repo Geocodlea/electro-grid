@@ -371,3 +371,4 @@ export const MainWorkflowClient: React.FC<MainWorkflowClientProps> = ({
     </div>
   );
 };
+

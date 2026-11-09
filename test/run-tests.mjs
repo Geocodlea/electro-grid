@@ -311,3 +311,4 @@ console.log('  [PASS] 4.2: Equipment returned only when both station and line ar
 console.log('\n=============================================================');
 console.log('🏆 ALL 11 VERIFICATION TESTS PASSED PERFECTLY!');
 console.log('=============================================================');
+

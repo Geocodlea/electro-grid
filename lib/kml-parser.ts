@@ -171,3 +171,4 @@ function inferEquipmentType(name: string): string {
   if (upper.includes('SDT')) return 'SDT';
   return 'PT';
 }
+

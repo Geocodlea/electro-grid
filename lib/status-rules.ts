@@ -70,3 +70,4 @@ export function computeEquipmentStatus(
 
 export const SAFETY_DISCLAIMER_TEXT =
   'ElectroGrid MT este exclusiv un instrument de consultare și localizare. Nu comandă echipamente, nu stabilește manevre și nu înlocuiește schemele operative sau dispozițiile de manevră. Culoarea verde nu certifică faptul că echipamentul este apt de manevră.';
+

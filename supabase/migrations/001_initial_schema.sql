@@ -246,3 +246,4 @@ create policy "Authenticated users can record audit actions"
   on public.modification_history for insert
   to authenticated
   with check (auth.uid() is not null);
+
