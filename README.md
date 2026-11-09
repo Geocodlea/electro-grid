@@ -9,7 +9,9 @@ Aplicație web completă, modernă și securizată pentru identificarea și navi
 - **Framework:** [Next.js 15 (App Router)](https://nextjs.org/) cu React 19 și TypeScript
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/) cu identitate vizuală industrială (bleumarin `#102c48`, `#123b57`, slate `#f0f4f7`)
 - **Pictograme:** [Lucide React](https://lucide.dev/)
-- **Bază de Date & Securitate:** [Supabase PostgreSQL](https://supabase.com/) cu Row Level Security (RLS) pe toate tabelele
+- **Bază de Date & Securitate:** Arhitectură duală hibridă:
+  - **Modul Local Persistent (implicit):** În lipsa credențialelor externe, toate datele (zone, stații, linii, echipamente, sesizări, istoric) sunt salvate pe disc în [`data/network_db.json`](data/network_db.json) și persistă automat între repornirile aplicației.
+  - **Modul Supabase PostgreSQL Cloud:** Când sunt configurate variabilele de mediu în `.env.local`, aplicația folosește automat instanța Supabase PostgreSQL cu Row Level Security (RLS) activat pe toate tabelele.
 - **Autentificare:** Supabase Auth (`@supabase/ssr`) cu mapare internă a numelor de utilizator și persistență pe cookie-uri securizate
 - **Parsare Importuri Geografice:** `jszip` (dezarhivare securizată KMZ), `papaparse` (CSV cu suport UTF-8 BOM pentru Excel) și parser KML/XML pentru Placemarks, puncte și poligoane
 - **Navigație:** Integrare directă cu Google Maps Navigation
@@ -165,3 +167,4 @@ Pentru instalarea în Supabase Cloud:
 ## ⚠️ 9. Avertisment de Securitate și Utilizare (Disclaimer)
 
 > **IMPORTANT:** ElectroGrid MT este un instrument exclusiv de consultare și localizare. Nu comandă echipamente, nu stabilește manevre și nu înlocuiește schemele operative sau dispozițiile de manevră emise de dispecerat. Culoarea verde indică doar absența sesizărilor active în registru și **NU certifică faptul că echipamentul este apt de manevră**.
+
