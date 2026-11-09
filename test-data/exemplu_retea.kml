@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Retea MT Prejmer - Test</name>
+    <Placemark>
+      <name>PT 140 Lunca</name>
+      <description>Post de transformare 20/0.4 kV</description>
+      <ExtendedData>
+        <SimpleData name="ID">PT-20-INT-140</SimpleData>
+        <SimpleData name="STATIE">Prejmer</SimpleData>
+        <SimpleData name="LINIE">Întorsura</SimpleData>
+        <SimpleData name="LOCALITATE">Lunca Câlnicului</SimpleData>
+      </ExtendedData>
+      <Point>
+        <coordinates>25.812300,45.745600,0</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Separator MT Pod Prejmer</name>
+      <description>Separator aerian tripolar</description>
+      <ExtendedData>
+        <SimpleData name="ID">SEP-20-INT-112</SimpleData>
+        <SimpleData name="STATIE">Prejmer</SimpleData>
+        <SimpleData name="LINIE">Întorsura</SimpleData>
+      </ExtendedData>
+      <Point>
+        <coordinates>25.799100,45.738900,0</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Incintă Stație Prejmer Poligon</name>
+      <description>Centru perimetru stație electrică</description>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              25.7760,45.7220,0
+              25.7770,45.7220,0
+              25.7770,45.7230,0
+              25.7760,45.7230,0
+              25.7760,45.7220,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>

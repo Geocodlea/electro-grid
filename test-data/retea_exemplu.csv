@@ -1,0 +1,6 @@
+Zona,Statie,Linie20kV,IdEchipament,Denumire,TipEchipament,Localitate,Latitudine,Longitudine,ObservatiiOficiale,Disponibilitate,MotivIndisponibilitate
+Săcele + Prejmer,Prejmer,Întorsura,SEP-20-INT-10,Separator MT 20kV Întorsura 10,Separator,Prejmer,45.7360000,25.7950000,Acces bun din drum asfaltat,Disponibil,
+Săcele + Prejmer,Prejmer,Întorsura,PT-20-INT-14,PT 134 Lunca Câlnicului,PT,Lunca Câlnicului,45.7420000,25.8050000,Post pe stâlp beton,Disponibil,
+Săcele + Prejmer,Prejmer,Întorsura,PCT-20-INT-05,PCT 19 Întorsura,PCT,Prejmer,45.7280000,25.7810000,Anvelopă beton nouă,Indisponibil,Mecanism de acționare defect
+Săcele + Prejmer,Prejmer,Întorsura,PT-20-INT-14,PT 134 DUPLICAT TEST,PT,Lunca Câlnicului,45.7420000,25.8050000,Duplicat pentru testare,Disponibil,
+Săcele + Prejmer,Prejmer,Întorsura,PT-INVALID-01,PT Fara Coordonate,PT,Prejmer,INVALID,INVALID,Eroare coordonate,Disponibil,

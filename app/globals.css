@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 21, 44, 59;
+  --background-start-rgb: 240, 244, 247;
+  --background-end-rgb: 240, 244, 247;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: #f0f4f7;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
