@@ -26,8 +26,23 @@ async function userClient() {
 
 export async function getZones(user: AuthSessionUser): Promise<Zone[]> {
   const supabase = await userClient();
-  const { data, error } = await supabase.from('zones').select('*').order('name');
-  if (error) throw new Error(`getZones: ${error.message}`);
+
+  const { data, error } = await supabase
+    .from('zones')
+    .select('*')
+    .order('name');
+
+  if (error) {
+    console.error('ELECTROGRID ZONES ERROR:', {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+    });
+
+    throw new Error(`getZones: ${error.message}`);
+  }
+
   return (data ?? []) as Zone[];
 }
 
@@ -242,8 +257,8 @@ export async function reviewObservation(
     action === 'approve'
       ? 'approved'
       : action === 'reject'
-      ? 'rejected'
-      : 'needs_verification';
+        ? 'rejected'
+        : 'needs_verification';
 
   // Fetch the observation first
   const { data: obs, error: fetchErr } = await supabase

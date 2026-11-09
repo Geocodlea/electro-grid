@@ -16,75 +16,88 @@ import { Observation, ParsedFeature } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 
 export async function loginAction(formData: FormData) {
-  const username = (formData.get('username') as string)?.trim().toLowerCase();
-  const password = (formData.get('password') as string)?.trim();
+  const username = (formData.get('username') as string)
+    ?.trim()
+    .toLowerCase();
+
+  // Do not trim passwords: spaces can be intentional.
+  const password = formData.get('password') as string;
 
   if (!username || !password) {
     return { error: 'Vă rugăm să introduceți utilizatorul și parola.' };
   }
 
-  // 1. If Supabase is configured, attempt authentication with mapped email
-  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    try {
-      const supabase = await createServerSupabase();
-      const internalEmail = usernameToEmail(username);
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    console.error('Supabase authentication is not configured.');
+    return { error: 'Serviciul de autentificare nu este configurat.' };
+  }
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: internalEmail,
-        password: password,
+  try {
+    const supabase = await createServerSupabase();
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: usernameToEmail(username),
+      password,
+    });
+
+    if (error || !data.user) {
+      console.error('Supabase login failed:', error?.message);
+      return { error: 'Nume de utilizator sau parolă incorectă.' };
+    }
+
+    // Verify that the authenticated user has an ElectroGrid profile.
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('id', data.user.id)
+      .maybeSingle();
+
+    if (profileError || !profile) {
+      await supabase.auth.signOut();
+
+      console.error('Authenticated user has no ElectroGrid profile:', {
+        userId: data.user.id,
+        error: profileError?.message,
       });
 
-      if (!error && data.user) {
-        revalidatePath('/', 'layout');
-        return { success: true };
-      }
-    } catch (err) {
-      console.warn('Supabase login error, checking local authorized accounts:', err);
+      return {
+        error: 'Contul nu este configurat în ElectroGrid. Contactați administratorul.',
+      };
     }
+
+    // Remove any old custom authentication cookie.
+    const cookieStore = await cookies();
+    cookieStore.delete('eg_local_session');
+
+    revalidatePath('/', 'layout');
+
+    return { success: true };
+  } catch (error) {
+    console.error('Login exception:', error);
+
+    return {
+      error: 'A apărut o eroare la autentificare. Încercați din nou.',
+    };
   }
-
-  // 2. Check authoritative local 4 accounts
-  const matched = AUTHORIZED_USERS.find(
-    (u) => u.username === username && u.password === password
-  );
-
-  if (!matched) {
-    return { error: 'Nume de utilizator sau parolă incorectă.' };
-  }
-
-  const sessionUser: AuthSessionUser = {
-    id: `usr-${matched.username}`,
-    username: matched.username,
-    role: matched.role,
-    assigned_zone_id: matched.assigned_zone_id,
-    full_name: matched.full_name,
-  };
-
-  const cookieStore = await cookies();
-  cookieStore.set('eg_local_session', JSON.stringify(sessionUser), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60 * 24 * 7, // 7 days
-  });
-
-  revalidatePath('/', 'layout');
-  return { success: true };
 }
 
 export async function logoutAction() {
+  const supabase = await createServerSupabase();
+
+  const { error } = await supabase.auth.signOut();
+
+  // Remove any legacy local session cookie.
   const cookieStore = await cookies();
   cookieStore.delete('eg_local_session');
 
-  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    try {
-      const supabase = await createServerSupabase();
-      await supabase.auth.signOut();
-    } catch (e) {
-      console.warn('Supabase logout error:', e);
-    }
+  if (error) {
+    console.error('Supabase logout error:', error.message);
   }
+
+  revalidatePath('/', 'layout');
 
   redirect('/login');
 }
