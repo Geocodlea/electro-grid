@@ -1,6 +1,8 @@
 import { createClient as createServerSupabase } from './supabase/server';
 import { createAdminClient } from './supabase/admin';
 import { AuthSessionUser } from './auth';
+import fs from 'node:fs';
+import path from 'node:path';
 import {
   Zone,
   Station,
@@ -175,30 +177,61 @@ const SEED_AUDIT: AuditLog[] = [
   },
 ];
 
-// Global in-memory storage (singleton in Node.js runtime)
-declare global {
-  var __EG_DB: {
-    zones: Zone[];
-    stations: Station[];
-    lines: Line20kV[];
-    equipment: Equipment[];
-    observations: Observation[];
-    auditLogs: AuditLog[];
-  } | undefined;
+const DB_FILE_PATH = path.join(process.cwd(), 'data', 'network_db.json');
+
+export function saveStoreToDisk(store: any) {
+  try {
+    const dir = path.dirname(DB_FILE_PATH);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(DB_FILE_PATH, JSON.stringify(store, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Eroare la salvarea pe disc a bazei de date locale:', err);
+  }
 }
 
-function getMemoryStore() {
+export interface DatabaseStore {
+  zones: Zone[];
+  stations: Station[];
+  lines: Line20kV[];
+  equipment: Equipment[];
+  observations: Observation[];
+  auditLogs: AuditLog[];
+}
+
+// Global in-memory storage (singleton in Node.js runtime)
+declare global {
+  var __EG_DB: DatabaseStore | undefined;
+}
+
+function getMemoryStore(): DatabaseStore {
   if (!global.__EG_DB) {
-    global.__EG_DB = {
-      zones: [...SEED_ZONES],
-      stations: [...SEED_STATIONS],
-      lines: [...SEED_LINES],
-      equipment: [...SEED_EQUIPMENT],
-      observations: [...SEED_OBSERVATIONS],
-      auditLogs: [...SEED_AUDIT],
-    };
+    let loaded = null;
+    try {
+      if (fs.existsSync(DB_FILE_PATH)) {
+        const raw = fs.readFileSync(DB_FILE_PATH, 'utf-8');
+        loaded = JSON.parse(raw);
+      }
+    } catch (e) {
+      console.warn('Nu s-a putut citi fișierul local network_db.json, se inițializează din seed:', e);
+    }
+
+    if (loaded && loaded.equipment && loaded.zones) {
+      global.__EG_DB = loaded;
+    } else {
+      global.__EG_DB = {
+        zones: [...SEED_ZONES],
+        stations: [...SEED_STATIONS],
+        lines: [...SEED_LINES],
+        equipment: [...SEED_EQUIPMENT],
+        observations: [...SEED_OBSERVATIONS],
+        auditLogs: [...SEED_AUDIT],
+      };
+      saveStoreToDisk(global.__EG_DB);
+    }
   }
-  return global.__EG_DB;
+  return global.__EG_DB!;
 }
 
 function hasSupabase(): boolean {
@@ -456,6 +489,8 @@ export async function submitObservation(
     created_at: new Date().toISOString(),
   });
 
+  saveStoreToDisk(store);
+
   return newObs;
 }
 
@@ -503,6 +538,8 @@ export async function reviewObservation(
     created_at: new Date().toISOString(),
   });
 
+  saveStoreToDisk(store);
+
   return obs;
 }
 
@@ -533,6 +570,8 @@ export async function updateEquipmentAvailability(
     details: { is_unavailable: isUnavailable, reason: eq.unavailable_reason },
     created_at: new Date().toISOString(),
   });
+
+  saveStoreToDisk(store);
 
   return eq;
 }
@@ -620,6 +659,8 @@ export async function createEquipment(
     created_at: new Date().toISOString(),
   });
 
+  saveStoreToDisk(store);
+
   return newEq;
 }
 
@@ -661,6 +702,8 @@ export async function updateEquipment(
     created_at: new Date().toISOString(),
   });
 
+  saveStoreToDisk(store);
+
   return eq;
 }
 
@@ -682,4 +725,7 @@ export async function deleteEquipment(id: string, adminUser: AuthSessionUser): P
     details: { code: removed.equipment_code, name: removed.name },
     created_at: new Date().toISOString(),
   });
+
+  saveStoreToDisk(store);
 }
+

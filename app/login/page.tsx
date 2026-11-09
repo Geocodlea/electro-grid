@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { loginAction } from '@/app/actions';
-import { Zap, Lock, User, AlertCircle, Shield, Info } from 'lucide-react';
+import { Zap, Lock, User, AlertCircle, Info } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,15 +29,6 @@ export default function LoginPage() {
     } catch (err: any) {
       setError(err?.message || 'Eroare la autentificare.');
       setLoading(false);
-    }
-  }
-
-  function fillCredentials(username: string, pass: string) {
-    const userInput = document.getElementById('username') as HTMLInputElement;
-    const passInput = document.getElementById('password') as HTMLInputElement;
-    if (userInput && passInput) {
-      userInput.value = username;
-      passInput.value = pass;
     }
   }
 
@@ -89,7 +80,7 @@ export default function LoginPage() {
                   required
                   autoCapitalize="none"
                   autoCorrect="off"
-                  placeholder="ex: admin sau electrician_sacele"
+                  placeholder="Introduceți utilizatorul"
                   className="w-full h-11 pl-10 pr-3 border border-slate-300 rounded-xl bg-slate-50 focus:bg-white text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-600 font-medium"
                 />
                 <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
@@ -124,48 +115,6 @@ export default function LoginPage() {
               {loading ? 'Se verifică contul...' : 'Conectare în cont'}
             </button>
           </form>
-
-          {/* Documented 4 authorized accounts quick picker for tests / field use */}
-          <div className="pt-3 border-t border-slate-100">
-            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
-              <Shield className="w-3.5 h-3.5 text-slate-400" />
-              <span>Conturi autorizate sistem:</span>
-            </div>
-            <div className="grid grid-cols-2 gap-1.5 text-[11px]">
-              <button
-                type="button"
-                onClick={() => fillCredentials('admin', 'admin123')}
-                className="p-2 text-left rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors"
-              >
-                <div className="font-bold text-slate-800">Administrator</div>
-                <div className="text-[10px] text-slate-500">Toate cele 5 zone</div>
-              </button>
-              <button
-                type="button"
-                onClick={() => fillCredentials('electrician_sacele', 'sacele123')}
-                className="p-2 text-left rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors"
-              >
-                <div className="font-bold text-slate-800">Electrician 1</div>
-                <div className="text-[10px] text-slate-500">Săcele + Prejmer</div>
-              </button>
-              <button
-                type="button"
-                onClick={() => fillCredentials('electrician_rasnov', 'rasnov123')}
-                className="p-2 text-left rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors"
-              >
-                <div className="font-bold text-slate-800">Electrician 2</div>
-                <div className="text-[10px] text-slate-500">Râșnov + Predeal</div>
-              </button>
-              <button
-                type="button"
-                onClick={() => fillCredentials('electrician_codlea', 'codlea123')}
-                className="p-2 text-left rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors"
-              >
-                <div className="font-bold text-slate-800">Electrician 3</div>
-                <div className="text-[10px] text-slate-500">Codlea + Feldioara</div>
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Safety Note */}
@@ -179,3 +128,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

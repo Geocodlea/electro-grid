@@ -2,6 +2,7 @@
 
 import { getCurrentUser } from '@/lib/auth';
 import { ParsedFeature } from '@/lib/types';
+import { saveStoreToDisk } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
 export interface ImportResult {
@@ -152,6 +153,8 @@ export async function commitImportAction(
     },
     created_at: new Date().toISOString(),
   });
+
+  saveStoreToDisk(store);
 
   revalidatePath('/');
   revalidatePath('/admin');
