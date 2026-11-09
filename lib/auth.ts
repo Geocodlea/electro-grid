@@ -73,7 +73,7 @@ export async function getCurrentUser(): Promise<AuthSessionUser | null> {
       username: profile.username,
       role: profile.role as AuthSessionUser['role'],
       assigned_zone_id: profile.assigned_zone_id,
-      assigned_zone: profile.assigned_zone as Zone | null,
+      assigned_zone: profile.assigned_zone as unknown as Zone | null,
       full_name: profile.full_name || profile.username,
     };
   } catch (error) {

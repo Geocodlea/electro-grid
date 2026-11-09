@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { createClient as createServerSupabase } from '@/lib/supabase/server';
-import { getCurrentUser, usernameToEmail, AuthSessionUser, AUTHORIZED_USERS } from '@/lib/auth';
+import { getCurrentUser, usernameToEmail } from '@/lib/auth';
 import {
   submitObservation as dbSubmitObservation,
   reviewObservation as dbReviewObservation,
